@@ -69,7 +69,7 @@ async function logout(req, res) {
     const token = req.cookies[authCookieName];
     try {
         const blackListToken = await Token.create({ token });
-        res.clearCookie(authCookieName).status(200).send({ message: 'Logged out!' });
+        res.clearCookie(authCookieName, { path: '/', domain: config.origin }).status(200).send({ message: 'Logged out!' });
     } catch (error) {
         res.send(err);
     }
