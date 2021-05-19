@@ -17,7 +17,7 @@ async function register(req, res, next) {
         let newUser = await User.create({ username, password });
         const token = utils.jwt.createToken({ id: newUser._id });
         if (process.env.NODE_ENV === 'production') {
-            res.cookie(authCookieName, token, { httpOnly: true, /*sameSite: '',*/ secure: true });
+            res.cookie(authCookieName, token, { httpOnly: true, sameSite: 'none', secure: true });
         } else {
             res.cookie(authCookieName, token, { httpOnly: true });
         }
@@ -54,7 +54,7 @@ async function login(req, res, next) {
         }
         const token = utils.jwt.createToken({ id: user._id });
         if (process.env.NODE_ENV === 'production') {
-            res.cookie(authCookieName, token, { httpOnly: true, /*sameSite: '',*/ secure: true });
+            res.cookie(authCookieName, token, { httpOnly: true, sameSite: 'none', secure: true });
         } else {
             res.cookie(authCookieName, token, { httpOnly: true });
         }
