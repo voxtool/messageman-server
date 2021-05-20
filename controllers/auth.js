@@ -88,7 +88,7 @@ async function getProfileInfo(req, res, next) {
 
 async function findUser(req, res, next) {
     const query = req.params.query;
-    if (req.user._id !== query && req.user.username !== query) {
+    if (req.user._id.toString() !== query && req.user.username !== query) {
         if (mongoose.Types.ObjectId.isValid(query)) {
             try {
                 const user = await User.find({ _id: query }).select(['_id', 'username']);
@@ -105,7 +105,7 @@ async function findUser(req, res, next) {
             }
         }
     } else {
-        res.status(200).end();
+        res.status(200).json([]);
     }
 }
 
