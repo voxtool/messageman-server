@@ -88,20 +88,24 @@ async function getProfileInfo(req, res, next) {
 
 async function findUser(req, res, next) {
     const query = req.params.query;
-    if (mongoose.Types.ObjectId.isValid(query)) {
-        try {
-            const user = await User.find({ _id: query }).select(['_id', 'username']);
-            res.status(200).json(user);
-        } catch (err) {
-            next(err);
+    if (req.user._id !== query && req.user.username !== query) {
+        if (mongoose.Types.ObjectId.isValid(query)) {
+            try {
+                const user = await User.find({ _id: query }).select(['_id', 'username']);
+                res.status(200).json(user);
+            } catch (err) {
+                next(err);
+            }
+        } else {
+            try {
+                const user = await User.find({ username: query }).select(['_id', 'username']);
+                res.status(200).json(user);
+            } catch (err) {
+                next(err);
+            }
         }
     } else {
-        try {
-            const user = await User.find({ username: query }).select(['_id', 'username']);
-            res.status(200).json(user);
-        } catch (err) {
-            next(err);
-        }
+        res.status(200).end();
     }
 }
 
